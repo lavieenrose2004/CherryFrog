@@ -1,4 +1,4 @@
 public interface ISpecialEffect
 {
-    void ApplyEffect(Player player);
+    public void ApplyEffect(Player player);
 }

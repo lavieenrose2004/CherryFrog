@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -7,6 +8,10 @@ public class Player : MonoBehaviour
     public int Speed { get; private set; }
     public int JumpPower { get; private set; }
 
+    bool isInvulnerable;
+
+    PlayerController playerController;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +20,8 @@ public class Player : MonoBehaviour
 
         Speed = 15;
         JumpPower = 60;
+
+        playerController = GetComponentInChildren<PlayerController>();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -53,19 +60,6 @@ public class Player : MonoBehaviour
         Debug.Log("Player's jump power increased by " + amount + ". Current jump power: " + JumpPower);
     }
 
-    public void TakeDamage(int damage)
-    {
-        CurrHealth -= damage;
-
-        if (CurrHealth <= 0)
-        {
-            CurrHealth = 0;
-            Die();
-        }
-
-        Debug.Log("Player took " + damage + " damage. Current health: " + CurrHealth);
-    }
-
     public void Heal(int amount)
     {
         CurrHealth += amount;
@@ -78,8 +72,36 @@ public class Player : MonoBehaviour
         Debug.Log("Player healed for " + amount + " health. Current health: " + CurrHealth);
     }
 
-    private void Die()
+    public void TakeDamage(int damage)
     {
+        if (isInvulnerable) return;
+
+        CurrHealth -= damage;
+        playerController.PlayHurtAnim();
+
+        if (CurrHealth <= 0)
+        {
+            CurrHealth = 0;
+            StartCoroutine(Die());
+        }
+
+        Debug.Log("Player took " + damage + " damage. Current health: " + CurrHealth);
+    }
+
+    IEnumerator Die()
+    {
+        playerController.PlayDeadAnim();
+
+        yield return new WaitForSeconds(0.3f);
+        playerController.gameObject.SetActive(false);
         Debug.Log("Player died.");
     }
+
+    IEnumerator Invulnerability()
+    {
+        isInvulnerable = true;
+        yield return new WaitForSeconds(0.5f);
+        isInvulnerable = false;
+    }
+
 }

@@ -43,6 +43,15 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && groundHit) HandleJump();
     }
 
+    public void PlayHurtAnim() {
+        anim.SetTrigger("Hit");
+    }
+
+    public Animator PlayDeadAnim() {
+        anim.SetTrigger("Dead");
+        return anim;
+    }
+
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontalMovement * player.Speed, rb.velocity.y);
