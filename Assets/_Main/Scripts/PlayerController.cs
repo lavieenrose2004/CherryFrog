@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] float speed;
-    [SerializeField] float jumpPower;
-
     [Header("Ground Check")]
     [SerializeField] LayerMask groundLayer;
     [SerializeField] float groundCheckDepth;
@@ -15,7 +12,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float fallThreshold = -2f;
     [SerializeField] private float jumpThreshold = 2f;
 
+    private Player player;
     private Rigidbody2D rb;
+
     private Animator anim;
     private SpriteRenderer spriteRenderer;
 
@@ -26,7 +25,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GetComponentInParent<Player>();
         rb = GetComponentInParent<Rigidbody2D>();
+
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
@@ -44,11 +45,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector2(horizontalMovement * speed, rb.velocity.y);
+        rb.velocity = new Vector2(horizontalMovement * player.Speed, rb.velocity.y);
     }
 
     private void HandleJump() {
-        rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+        rb.AddForce(Vector2.up * player.JumpPower, ForceMode2D.Impulse);
     }
 
     private void UpdateAnimations()
