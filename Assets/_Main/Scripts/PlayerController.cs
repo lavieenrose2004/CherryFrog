@@ -12,7 +12,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float groundCheckDepth;
 
     [Header("Configurations")]
-    [SerializeField] private float fallThreshold = -0.1f;
+    [SerializeField] private float fallThreshold = -2f;
+    [SerializeField] private float jumpThreshold = 2f;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -37,7 +38,6 @@ public class PlayerController : MonoBehaviour
         UpdateAnimations();
 
         groundHit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDepth, groundLayer);
-        if (groundHit) anim.SetTrigger("Land");
 
         if (Input.GetButtonDown("Jump") && groundHit) HandleJump();
     }
@@ -49,7 +49,6 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJump() {
         rb.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
-        anim.SetTrigger("Jump");
     }
 
     private void UpdateAnimations()
@@ -57,10 +56,14 @@ public class PlayerController : MonoBehaviour
         if (horizontalMovement > 0) spriteRenderer.flipX = false;
         else if (horizontalMovement < 0) spriteRenderer.flipX = true;
 
-        if (rb.velocity.x != 0) anim.SetBool("IsRunning", true);
+        if (horizontalMovement != 0) anim.SetBool("IsRunning", true);
         else anim.SetBool("IsRunning", false);
 
-        if (rb.velocity.y <= fallThreshold) anim.SetTrigger("Fall");
+        if (rb.velocity.y <= fallThreshold && !groundHit) anim.SetBool("IsFalling", true);
+        else anim.SetBool("IsFalling", false);
+
+        if (rb.velocity.y >= jumpThreshold && !groundHit) anim.SetBool("IsJumping", true);
+        else anim.SetBool("IsJumping", false);
     }
 
 
