@@ -17,6 +17,20 @@ public class Player : MonoBehaviour
         JumpPower = 60;
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        Item item = other.GetComponent<Item>();
+
+        if (item != null) item.OnPickUp(this);
+
+        ISpecialEffect specialEffect = other.GetComponent<ISpecialEffect>();
+
+        if (specialEffect != null)
+        {
+            specialEffect.ApplyEffect(this);
+        }
+    }
+
     public void EnhanceMaxHealthBy(int amount)
     {
         MaxHealth += amount;
