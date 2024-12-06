@@ -9,7 +9,7 @@ public class Banana : SpecialItem
     public override void ApplyEffect(Player player)
     {
         if (player.CurrHealth == player.MaxHealth) return;
-        
+
         player.Heal(effectStrength);
     }
 }

@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     [Header("Ground Check")]
     [SerializeField] LayerMask groundLayer;
     [SerializeField] float groundCheckDepth;
+    [SerializeField] bool isGrounded;   
+
 
     [Header("Configurations")]
     [SerializeField] private float fallThreshold = -2f;
@@ -19,8 +21,6 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     private float horizontalMovement; 
-
-    private bool groundHit;   
 
     // Start is called before the first frame update
     void Start()
@@ -38,9 +38,9 @@ public class PlayerController : MonoBehaviour
         horizontalMovement = Input.GetAxis("Horizontal");
         UpdateAnimations();
 
-        groundHit = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDepth, groundLayer);
+        isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDepth, groundLayer);
 
-        if (Input.GetButtonDown("Jump") && groundHit) HandleJump();
+        if (Input.GetButtonDown("Jump") && isGrounded) HandleJump();
     }
 
     public void PlayHurtAnim() {
@@ -69,10 +69,10 @@ public class PlayerController : MonoBehaviour
         if (horizontalMovement != 0) anim.SetBool("IsRunning", true);
         else anim.SetBool("IsRunning", false);
 
-        if (rb.velocity.y <= fallThreshold && !groundHit) anim.SetBool("IsFalling", true);
+        if (rb.velocity.y <= fallThreshold && !isGrounded) anim.SetBool("IsFalling", true);
         else anim.SetBool("IsFalling", false);
 
-        if (rb.velocity.y >= jumpThreshold && !groundHit) anim.SetBool("IsJumping", true);
+        if (rb.velocity.y >= jumpThreshold && !isGrounded) anim.SetBool("IsJumping", true);
         else anim.SetBool("IsJumping", false);
     }
 

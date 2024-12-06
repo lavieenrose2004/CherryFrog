@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -8,6 +7,10 @@ public class Player : MonoBehaviour
     public int CurrHealth { get; private set; }
     public int Speed { get; private set; }
     public int JumpPower { get; private set; }
+    public int CherryCount { get; private set; }
+
+    [SerializeField] int speed = 15;
+    [SerializeField] int jumpPower = 60;
 
     bool isInvulnerable;
 
@@ -19,8 +22,8 @@ public class Player : MonoBehaviour
         MaxHealth = 10;
         CurrHealth = MaxHealth;
 
-        Speed = 15;
-        JumpPower = 60;
+        Speed = speed;
+        JumpPower = jumpPower;
 
         playerController = GetComponentInChildren<PlayerController>();
     }
@@ -39,26 +42,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void AddCherry()
+    {
+        CherryCount++;
+    }
+
     public void EnhanceMaxHealthBy(int amount)
     {
         MaxHealth += amount;
         CurrHealth = MaxHealth;
 
         Debug.Log("Player's max health increased by " + amount + ". Current health: " + CurrHealth);
-    }
-
-    public void EnhanceSpeedBy(int amount)
-    {
-        Speed += amount;
-
-        Debug.Log("Player's speed increased by " + amount + ". Current speed: " + Speed);
-    }
-
-    public void EnhanceJumpPowerBy(int amount)
-    {
-        JumpPower += amount;
-
-        Debug.Log("Player's jump power increased by " + amount + ". Current jump power: " + JumpPower);
     }
 
     public void Heal(int amount)
@@ -79,6 +73,7 @@ public class Player : MonoBehaviour
 
         CurrHealth -= damage;
         playerController.PlayHurtAnim();
+        StartCoroutine(Invulnerability());
 
         if (CurrHealth <= 0)
         {
