@@ -47,9 +47,9 @@ public class PlayerController : MonoBehaviour
         anim.SetTrigger("Hit");
     }
 
-    public Animator PlayDeadAnim() {
+    public void PlayDeadAnim() {
         anim.SetTrigger("Dead");
-        return anim;
+        rb.velocity = Vector2.zero;
     }
 
     private void FixedUpdate()

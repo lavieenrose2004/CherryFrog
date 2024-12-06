@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(CircleCollider2D))]
 public abstract class Item : MonoBehaviour
 {
     public virtual void OnPickUp(Player player) {
