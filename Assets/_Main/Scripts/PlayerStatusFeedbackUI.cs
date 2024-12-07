@@ -2,29 +2,34 @@ using DG.Tweening;
 using TMPro;
 using UnityEngine;
 
-public class BleedUI : MonoBehaviour
+public class PlayerStatusFeedbackUI : MonoBehaviour
 {
-    [SerializeField] private Spike bleedSource;
+    [SerializeField] private Player player;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private Transform textUITrans;
+
+    private TMP_Text textUI;
 
     // Start is called before the first frame update
     void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
         canvasGroup.alpha = 0;
+
+        textUI = textUITrans.GetComponent<TMP_Text>();
     }
 
     void OnEnable() {
-        bleedSource.OnBleed += ShowBleedUI;
+        player.OnStatusApplied += ShowFXUI;
     }
 
     void OnDisable() {
-        bleedSource.OnBleed -= ShowBleedUI;
+        player.OnStatusApplied -= ShowFXUI;
     }
     
-    void ShowBleedUI() {
-        Debug.Log("Sasd");
+    void ShowFXUI(string txt, Color color) {
+        textUI.text = txt;
+        textUI.color = color;
 
         Sequence sequence = DOTween.Sequence()
             .Join(canvasGroup.DOFade(1, 0.5f).SetEase(Ease.OutBack))

@@ -1,8 +1,12 @@
 using System.Collections;
+using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public event System.Action<string, Color> OnStatusApplied;
+
     public int MaxHealth { get; private set; }
     public int CurrHealth { get; private set; }
     public int Speed { get; private set; }
@@ -47,6 +51,27 @@ public class Player : MonoBehaviour
         CherryCount++;
     }
 
+    public void Bleed(int damage, int duration, int interval)
+    {
+        StartCoroutine(BleedCoroutine(damage, duration, interval));
+    }
+
+    IEnumerator BleedCoroutine(int damage, int duration, int interval)
+    {
+        int elapsedTime = 0;
+        while (elapsedTime < duration)
+        {
+            if (CurrHealth <= 0) break;
+
+            yield return new WaitForSeconds(interval);
+
+            TakeDamage(damage);
+            OnStatusApplied?.Invoke("BLEED", Color.red);
+
+            elapsedTime += interval;
+        }
+    }
+
     public void EnhanceMaxHealthBy(int amount)
     {
         MaxHealth += amount;
@@ -63,6 +88,8 @@ public class Player : MonoBehaviour
         {
             CurrHealth = MaxHealth;
         }
+
+        OnStatusApplied?.Invoke("HEALED", Color.green);
 
         Debug.Log("Player healed for " + amount + " health. Current health: " + CurrHealth);
     }
@@ -87,10 +114,11 @@ public class Player : MonoBehaviour
     IEnumerator Die()
     {
         playerController.PlayDeadAnim();
-
-        yield return new WaitForSeconds(0.3f);
-        playerController.gameObject.SetActive(false);
+        
+        playerController.enabled = false;
         Debug.Log("Player died.");
+
+        yield return null;
     }
 
     IEnumerator Invulnerability()
