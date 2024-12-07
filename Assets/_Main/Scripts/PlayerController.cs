@@ -80,6 +80,8 @@ public class PlayerController : MonoBehaviour
 
         if (rb.velocity.y >= jumpThreshold && !isGrounded) anim.SetBool("IsJumping", true);
         else anim.SetBool("IsJumping", false);
+
+        anim.SetBool("IsGrounded", isGrounded);
     }
 
 
