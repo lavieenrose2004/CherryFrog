@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] int speed = 15;
     [SerializeField] int jumpPower = 60;
+    [SerializeField] Menu menu;
 
     bool isInvulnerable;
 
@@ -119,6 +120,8 @@ public class Player : MonoBehaviour
 
         playerController.gameObject.SetActive(false);
         Debug.Log("Player died.");
+
+        menu.GoToScene("Menu");
     }
 
     IEnumerator Invulnerability()

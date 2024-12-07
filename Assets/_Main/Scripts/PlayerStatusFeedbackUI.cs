@@ -5,19 +5,7 @@ using UnityEngine;
 public class PlayerStatusFeedbackUI : MonoBehaviour
 {
     [SerializeField] private Player player;
-    [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private Transform textUITrans;
-
-    private TMP_Text textUI;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        canvasGroup = GetComponent<CanvasGroup>();
-        canvasGroup.alpha = 0;
-
-        textUI = textUITrans.GetComponent<TMP_Text>();
-    }
+    [SerializeField] private GameObject textUIPrefab;
 
     void OnEnable() {
         player.OnStatusApplied += ShowFXUI;
@@ -28,14 +16,18 @@ public class PlayerStatusFeedbackUI : MonoBehaviour
     }
     
     void ShowFXUI(string txt, Color color) {
-        textUI.text = txt;
-        textUI.color = color;
+        GameObject textUIObj = Instantiate(textUIPrefab, transform.position, Quaternion.identity, transform);
+        Transform objTrans = textUIObj.transform;
+        TMP_Text textField = textUIObj.GetComponent<TMP_Text>();
+
+        textField.text = txt;
+        textField.color = color;
 
         Sequence sequence = DOTween.Sequence()
-            .Join(canvasGroup.DOFade(1, 0.5f).SetEase(Ease.OutBack))
-            .Join(textUITrans.DOLocalMoveY(textUITrans.localPosition.y + 0.2f, 0.5f).SetEase(Ease.OutBack))
+            .Join(textField.DOFade(1, 0.5f).SetEase(Ease.OutBack))
+            .Join(objTrans.DOLocalMoveY(objTrans.localPosition.y + 0.2f, 0.5f).SetEase(Ease.OutBack))
             .AppendInterval(1)
-            .Append(canvasGroup.DOFade(0, 0.5f).SetEase(Ease.OutBack))
-            .AppendCallback(() => textUITrans.localPosition = Vector3.zero);
+            .Append(textField.DOFade(0, 0.5f).SetEase(Ease.OutBack))
+            .AppendCallback(() => objTrans.localPosition = Vector3.zero);
     }
 }
