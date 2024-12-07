@@ -6,7 +6,7 @@ public class BleedUI : MonoBehaviour
 {
     [SerializeField] private Spike bleedSource;
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private Transform textUI;
+    [SerializeField] private Transform textUITrans;
 
     // Start is called before the first frame update
     void Start()
@@ -28,9 +28,9 @@ public class BleedUI : MonoBehaviour
 
         Sequence sequence = DOTween.Sequence()
             .Join(canvasGroup.DOFade(1, 0.5f).SetEase(Ease.OutBack))
-            .Join(textUI.DOLocalMoveY(textUI.localPosition.y + 0.2f, 0.5f).SetEase(Ease.OutBack))
+            .Join(textUITrans.DOLocalMoveY(textUITrans.localPosition.y + 0.2f, 0.5f).SetEase(Ease.OutBack))
             .AppendInterval(1)
             .Append(canvasGroup.DOFade(0, 0.5f).SetEase(Ease.OutBack))
-            .AppendCallback(() => textUI.localPosition = Vector3.zero);
+            .AppendCallback(() => textUITrans.localPosition = Vector3.zero);
     }
 }

@@ -1,5 +1,3 @@
-using System.Linq;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -21,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     private float horizontalMovement; 
+    private Vector3 startingPos;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +29,8 @@ public class PlayerController : MonoBehaviour
 
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        startingPos = player.transform.position;
     }
 
     // Update is called once per frame
@@ -41,6 +42,7 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDepth, groundLayer);
 
         if (Input.GetButtonDown("Jump") && isGrounded) HandleJump();
+        if (Input.GetKeyDown(KeyCode.R)) player.transform.position = startingPos;
     }
 
     public void PlayHurtAnim() {
