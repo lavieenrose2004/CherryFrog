@@ -42,7 +42,10 @@ public class PlayerController : MonoBehaviour
         isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDepth, groundLayer);
 
         if (Input.GetButtonDown("Jump") && isGrounded) HandleJump();
-        if (Input.GetKeyDown(KeyCode.R)) player.transform.position = startingPos;
+        if (Input.GetKeyDown(KeyCode.R)) GoToStartingPos();
+    }
+    public void GoToStartingPos() {
+        player.transform.position = startingPos;
     }
 
     public void PlayHurtAnim() {

@@ -115,10 +115,10 @@ public class Player : MonoBehaviour
     {
         playerController.PlayDeadAnim();
         
-        playerController.enabled = false;
-        Debug.Log("Player died.");
+        yield return new WaitForSeconds(0.3f);
 
-        yield return null;
+        playerController.gameObject.SetActive(false);
+        Debug.Log("Player died.");
     }
 
     IEnumerator Invulnerability()
