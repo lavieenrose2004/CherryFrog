@@ -5,6 +5,7 @@ public abstract class Item : MonoBehaviour
 {
     public virtual void OnPickUp(Player player) {
         Debug.Log($"Player picked up {GetType().Name}");
+        SoundManager.Instance.PlayCollectItemSound();
         Destroy(gameObject);
     }
 }

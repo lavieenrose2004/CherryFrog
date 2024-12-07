@@ -10916,6 +10916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 15
   jumpPower: 60
+  menu: {fileID: 2122163125}
 --- !u!70 &1173882052
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

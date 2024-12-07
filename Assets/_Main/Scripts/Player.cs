@@ -76,7 +76,6 @@ public class Player : MonoBehaviour
     public void EnhanceMaxHealthBy(int amount)
     {
         MaxHealth += amount;
-        CurrHealth = MaxHealth;
 
         Debug.Log("Player's max health increased by " + amount + ". Current health: " + CurrHealth);
     }
@@ -91,6 +90,7 @@ public class Player : MonoBehaviour
         }
 
         OnStatusApplied?.Invoke("HEALED", Color.green);
+        SoundManager.Instance.PlayHealSound();
 
         Debug.Log("Player healed for " + amount + " health. Current health: " + CurrHealth);
     }
@@ -101,6 +101,7 @@ public class Player : MonoBehaviour
 
         CurrHealth -= damage;
         playerController.PlayHurtAnim();
+        SoundManager.Instance.PlayHitSound();
         StartCoroutine(Invulnerability());
 
         if (CurrHealth <= 0)

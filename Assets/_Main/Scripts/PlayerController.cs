@@ -64,6 +64,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJump() {
         rb.AddForce(Vector2.up * player.JumpPower, ForceMode2D.Impulse);
+        SoundManager.Instance.PlayJumpSound();
     }
 
     private void UpdateAnimations()
